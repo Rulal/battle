@@ -9,11 +9,11 @@ class BattleController;
 class Unit
 {
 public:
-    Unit(BattleController* battleController = nullptr);
+    Unit();
     ~Unit();
-    void init();
+    void init(uint8 id, uint8 team, uint8 place, BattleController* battleController);
 
-    void setBattleController(BattleController* battleController);
+//    void setBattleController(BattleController* battleController);
     void gameTick();
     bool isDead() const;
 
@@ -25,11 +25,9 @@ public:
     void gettingHP(stat hp, uint8 idOwner);
 
 private:
-    BattleController* _battleController;
-
+    uint8 _id = INVALID_ID;
     uint8 _team;
     uint8 _place;
-    uint8 _id = INVALID_ID;
 
     stat _maxHP;
     stat _curHP;
@@ -41,6 +39,8 @@ private:
     stat _damage;
     stat _defense;
     stat _speed;
+
+    BattleController* _battleController;
 };
 
 #endif // UNIT_H

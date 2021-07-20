@@ -5,12 +5,15 @@ BattleController::BattleController(uint8 teamsCount, uint8 sizeTeam) :
     _teamsCount(teamsCount),
     _sizeTeam(sizeTeam)
 {
-    _units = new Unit[_teamsCount * _teamsCount];
-    _speedList = new stat[_teamsCount * _teamsCount];
+    _units = new Unit[_teamsCount * _sizeTeam];
+    _speedList = new stat[_teamsCount * _sizeTeam];
 
-    for (uint8 i = 0; i < _teamsCount * _teamsCount; i++)
+    for (uint8 i = 0; i < _teamsCount; i++)
     {
-        _units[i].setBattleController(this);
+        for (uint8 j = 0; j < _sizeTeam; j++)
+        {
+            _units[i * _sizeTeam + j].init(i * _sizeTeam + j, i, j, this);
+        }
     }
 
 //    _teams = new Unit*[_teamsCount];

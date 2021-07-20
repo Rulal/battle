@@ -7,11 +7,18 @@
 
 using uint8 = unsigned char;
 using uint16 = unsigned short;
-using stat = int;
+using stat = uint16;
 
 static bool idIsValid(uint8 id)
 {
     return id != INVALID_ID;
+}
+
+
+template <typename T>
+static T dataToValue(const char* data, int offset = 0)
+{
+    return *(T*)(data + offset);
 }
 
 #endif // DEFINES_H

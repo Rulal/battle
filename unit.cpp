@@ -2,8 +2,7 @@
 #include "signaltype.h"
 #include "battlecontroller.h"
 
-Unit::Unit(BattleController* battleController) :
-    _battleController(battleController)
+Unit::Unit()
 {
 }
 
@@ -11,15 +10,18 @@ Unit::~Unit()
 {
 }
 
-void Unit::init()
+void Unit::init(uint8 id, uint8 team, uint8 place, BattleController* battleController)
 {
-
-}
-
-void Unit::setBattleController(BattleController* battleController)
-{
+    _id = id;
+    _team = team;
+    _place = place;
     _battleController = battleController;
 }
+
+//void Unit::setBattleController(BattleController* battleController)
+//{
+//    _battleController = battleController;
+//}
 
 void Unit::gameTick()
 {

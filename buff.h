@@ -1,13 +1,12 @@
 #ifndef EFFECT_H
 #define EFFECT_H
 
-#include "signaltype.h"
 
-#include <string>
+#include "buffaction.h"
 
 class BattleController;
 
-class Buff
+class Buff : public BuffAction
 {
     enum Settings : uint8
     {
@@ -28,23 +27,6 @@ class Buff
 
 public:
 
-    struct Params
-    {
-        BattleController* battleController;
-        uint8 owner = INVALID_ID;
-        uint8 carrier = INVALID_ID;
-
-        Signal signalType;
-        Signal subscribes;
-        int settings;
-
-        uint16 stacks;
-        int time;
-
-        std::string action;
-        std::string actionAfterDead;
-    };
-
     Buff(BattleController* battleController, uint8 idBuff, uint8 owner, uint8 carrier);
     ~Buff();
 
@@ -63,8 +45,6 @@ private:
     bool isSubscribe(const Signal signalType) const;
     uint8 getNeededDispelLevel() const;
     void setInActive();
-
-    void activateString(const std::string& string);
 
     Params _params;
 

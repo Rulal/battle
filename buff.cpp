@@ -1,5 +1,4 @@
 #include "buff.h"
-#include "buffaction.h"
 
 Buff::Buff(BattleController* battleController, uint8 idBuff, uint8 owner, uint8 carrier)
 {
@@ -33,7 +32,7 @@ void Buff::action(const Signal signalType, SignalStruct& signalStruct)
     if (!isSubscribe(signalType))
         return;
 
-    BuffAction::activateString(*this, false);
+    activateString(false);
 }
 
 bool Buff::dispel(uint8 level)
@@ -59,16 +58,6 @@ const Buff::Params& Buff::getParams() const
     return _params;
 }
 
-//const std::string& Buff::getActionString() const
-//{
-//    return _action;
-//}
-
-//const std::string& Buff::getAfterDeadActionString() const
-//{
-//    return _afterDeadAction;
-//}
-
 void Buff::init(uint8 id)
 {
     if (!idIsValid(id))
@@ -82,7 +71,7 @@ void Buff::actionAfterDead()
     if (!isActive())
         return;
 
-    BuffAction::activateString(*this, false);
+    activateString(false);
 }
 
 bool Buff::isSubscribe(const Signal signalType) const
