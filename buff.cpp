@@ -1,5 +1,10 @@
 #include "buff.h"
 
+
+Buff::Buff()
+{
+}
+
 Buff::Buff(BattleController* battleController, uint8 idBuff, uint8 owner, uint8 carrier)
 {
     _params.battleController = battleController;

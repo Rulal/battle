@@ -2,7 +2,7 @@
 #define BATTLECONTROLLER_H
 
 #include "signaltype.h"
-#include "defines.h"
+#include "structures.h"
 #include "buff.h"
 
 #include <list>
@@ -17,8 +17,11 @@ public:
     ~BattleController();
 
     void gameTick();
+    void trySpellCast();
     void signalActive(const Signal signalType, SignalStruct& signalStruct = invalidSignalStruct);
     Unit& getUnit(uint8 idUnit);
+    void addUserAction(UserAction action);
+    void removeUserAction(UserAction action);
 
 private:
     void sortSpeedList();
@@ -37,6 +40,8 @@ private:
 //    uint8** _placement;
     stat* _speedList;
     Unit* _units;
+
+    std::list<UserAction>* _userActions;
 
     uint8 signalsCyclesCount = 0;
 };

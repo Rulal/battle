@@ -2,10 +2,8 @@
 
 Battleground::Battleground()
 {
-
 }
 
 Battleground::~Battleground()
 {
-
 }

@@ -9,13 +9,15 @@ class BattleController;
 
 class BuffAction
 {
+public:
+    bool isValidate() const;
 
 protected:
     struct Params
     {
-        BattleController* battleController;
-        uint8 owner = INVALID_ID;
-        uint8 carrier = INVALID_ID;
+        BattleController* battleController = nullptr;
+        uint8 owner = INVALID_ID_8;
+        uint8 carrier = INVALID_ID_8;
 
         Signal signalType;
         Signal subscribes;

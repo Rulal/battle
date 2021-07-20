@@ -1,10 +1,10 @@
-#ifndef EFFECT_H
-#define EFFECT_H
-
+#ifndef BUFF_H
+#define BUFF_H
 
 #include "buffaction.h"
 
 class BattleController;
+
 
 class Buff : public BuffAction
 {
@@ -26,7 +26,7 @@ class Buff : public BuffAction
     };
 
 public:
-
+    Buff();
     Buff(BattleController* battleController, uint8 idBuff, uint8 owner, uint8 carrier);
     ~Buff();
 
@@ -48,10 +48,6 @@ private:
 
     Params _params;
 
-
-public:
-
-
 };
 
-#endif // EFFECT_H
+#endif // BUFF_H

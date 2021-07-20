@@ -7,6 +7,7 @@ BattleController::BattleController(uint8 teamsCount, uint8 sizeTeam) :
 {
     _units = new Unit[_teamsCount * _sizeTeam];
     _speedList = new stat[_teamsCount * _sizeTeam];
+    _userActions = new std::list<UserAction>[_teamsCount];
 
     for (uint8 i = 0; i < _teamsCount; i++)
     {
@@ -15,30 +16,13 @@ BattleController::BattleController(uint8 teamsCount, uint8 sizeTeam) :
             _units[i * _sizeTeam + j].init(i * _sizeTeam + j, i, j, this);
         }
     }
-
-//    _teams = new Unit*[_teamsCount];
-//    _placement = new uint8*[_teamsCount];
-//    for (uint8 i = 0; i < _teamsCount; ++i)
-//    {
-//        _teams[i] = new Unit[_teamsCount];
-//        _placement[i] = new uint8[_sizeTeam];
-//        for (uint8 j = 0; j < _sizeTeam; ++j)
-//            _teams[i][j] = Unit();
-//    }
 }
 
 BattleController::~BattleController()
 {
     delete[] _units;
     delete[] _speedList;
-
-//    for (uint8 i = 0; i < _teamsCount; ++i)
-//    {
-//        delete[] _teams[i];
-//        delete[] _placement[i];
-//    }
-//    delete[] _teams;
-//    delete[] _placement;
+    delete[] _userActions;
 }
 
 void BattleController::gameTick()
@@ -49,9 +33,45 @@ void BattleController::gameTick()
     signalActive(Signal::AfterGloabalTick);
 }
 
+void BattleController::trySpellCast()
+{
+    for (uint8 i = 0; i < _teamsCount * _sizeTeam; i++)
+    {
+        std::list<UserAction>& teamActions = _userActions[_speedList[i] / _sizeTeam];
+        for (auto it = teamActions.begin(); it != teamActions.end();)
+        {
+            if (_speedList[i] == it->owner && _units[it->owner].activateSpell(it->spellId, it->target))
+                it = teamActions.erase(it);
+            else
+                it++;
+        }
+    }
+}
+
 Unit& BattleController::getUnit(uint8 idUnit)
 {
     return _units[idUnit];
+}
+
+void BattleController::addUserAction(UserAction action)
+{
+#ifdef STUPID_VALIDATE
+   if  (action.owner >= _sizeTeam * _teamsCount)
+       return;
+#endif
+
+    _userActions[action.owner / _sizeTeam].push_back(action);
+    _userActions[action.owner / _sizeTeam].unique();
+}
+
+void BattleController::removeUserAction(UserAction action)
+{
+#ifdef STUPID_VALIDATE
+   if  (action.owner >= _sizeTeam * _teamsCount)
+       return;
+#endif
+
+    _userActions[action.owner / _sizeTeam].remove(action);
 }
 
 void BattleController::signalActive(const Signal signalType, SignalStruct& signalStruct)
@@ -77,8 +97,10 @@ void BattleController::sortSpeedList()
 
 void BattleController::actionBuff(const Signal signalType, SignalStruct& signalStruct)
 {
-    for (auto it = _activeEffects.begin(); it != _activeEffects.end(); it++)
-        it->action(signalType, signalStruct);
+//    for (auto it = _activeEffects.begin(); it != _activeEffects.end(); it++)
+//        it->action(signalType, signalStruct);
+    for (auto& item : _activeEffects)
+        item.action(signalType, signalStruct);
 }
 
 void BattleController::removeInActiveBuff()
@@ -90,4 +112,7 @@ void BattleController::removeInActiveBuff()
         else
             it++;
     }
+
+    sortSpeedList(); //static sort
+                     //TO DO: dynamic sort
 }
